@@ -1,15 +1,24 @@
 import React from "react";
 import Note from "./components/Note";
+import Modal from "./components/Modal";
+import ViewDetail from "./components/ViewDetail";
+import DeleteNote from "./components/DeleteNote";
 
 class App extends React.Component {
   constructor() {
     super();
-    this.state = { allNotes: ["Note"] };
+    this.state = { allNotes: ["note"] };
   }
 
   onNoteAddition = (note) => {
     const newNotes = [...this.state.allNotes];
     newNotes.push(note);
+    this.setState({ allNotes: newNotes });
+  };
+
+  onNoteDeletion = (index) => {
+    const newNotes = [...this.state.allNotes];
+    newNotes.splice(index, 1);
     this.setState({ allNotes: newNotes });
   };
 
@@ -36,10 +45,13 @@ class App extends React.Component {
                   <div className="card-header">Note {index + 1}</div>
                   <div className="card-body">
                     <p className="card-text">{note}</p>
-                    <button className="btn btn-primary">View Detail</button>
-                    <button className="btn btn-primary">View Detail</button>
+                    <ViewDetail index={index} />
+                    <DeleteNote
+                      onNoteDeletion={() => this.onNoteDeletion(index)}
+                    />
                   </div>
                 </div>
+                <Modal note={note} index={index} />
               </div>
             );
           })}
